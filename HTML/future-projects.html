@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dammidi - Home</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    /* Top bar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #007bff;
+      color: white;
+      padding: 15px 30px;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+    }
+    .user-info img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .user-details {
+      text-align: right;
+    }
+
+    /* Main section */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Tabs */
+    .project-tabs {
+      display: flex;
+      justify-content: center;
+      background: #e0e0e0;
+      padding: 15px;
+    }
+    .tab {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #ccc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 20px;
+      cursor: pointer;
+      font-weight: bold;
+      text-align: center;
+    }
+    .tab.active {
+      background: #007bff;
+      color: white;
+    }
+
+    /* Projects section */
+    .projects-section {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+	  justify-content: flex-start;
+      align-content: flex-start;
+      gap: 20px;
+    }
+    .project-logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: #28a745;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .project-logo:hover {
+      background: #1e7e34;
+    }
+    .new-project {
+      background: #ff5722;
+    }
+    .new-project:hover {
+      background: #e64a19;
+    }
+
+    /* Blur effect when modal is open */
+    .blurred {
+      filter: blur(5px);
+      pointer-events: none;
+    }
+
+    /* Modal overlay */
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .modal-content h3 {
+      margin-top: 0;
+      text-align: center;
+    }
+    .modal-content input[type="text"],
+    .modal-content input[type="file"] {
+      width: 100%;
+      margin: 10px 0;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .modal-content button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .save-btn {
+      background: #28a745;
+      color: white;
+    }
+    .cancel-btn {
+      background: #dc3545;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <!-- Top bar -->
+  <div class="top-bar">
+    <div class="user-info">
+      <img src="profile.png" alt="Profile Icon" />
+      <span>Welcome, Venkatesh</span>
+    </div>
+    <div class="user-details">
+      <div>UserID: DAM123</div>
+      <div>Login Time: 22-Feb-2026 15:50</div>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <div class="main" id="main-content">
+    <!-- Tabs -->
+    <div class="project-tabs">
+      <div class="tab" onclick="location.href='past-project.html'">Past Projects</div>
+      <div class="tab" onclick="location.href='home.html'">Running Projects</div>
+      <div class="tab active">Future Projects</div>
+    </div>
+
+    <!-- Scrollable projects -->
+    <div class="projects-section">
+      <div class="project-logo" onclick="location.href='project.html'">Project 1</div>
+      <div class="project-logo" onclick="location.href='project2.html'">Project 2</div>
+      <div class="project-logo" onclick="location.href='project3.html'">Project 3</div>
+      <div class="project-logo" onclick="location.href='project.html'">Project 4</div>
+      <div class="project-logo" onclick="location.href='project.html'">Project 5</div>
+      <div class="project-logo" onclick="location.href='project.html'">Project 6</div>
+      <!-- New Project button -->
+      <div class="project-logo new-project" onclick="openModal()">New Project</div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h3>Add New Project</h3>
+      <form onsubmit="return saveProject()">
+        <input type="text" id="projectName" placeholder="Project Name (required)" required />
+        <input type="file" id="projectImage" accept="image/*" />
+        <button type="submit" class="save-btn">Save Project</button>
+        <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function openModal() {
+      document.getElementById("main-content").classList.add("blurred");
+      document.getElementById("modal").style.display = "flex";
+    }
+    function closeModal() {
+      document.getElementById("main-content").classList.remove("blurred");
+      document.getElementById("modal").style.display = "none";
+    }
+    function saveProject() {
+      const name = document.getElementById("projectName").value.trim();
+      if (!name) {
+        alert("Project name is required!");
+        return false;
+      }
+      alert("Project '" + name + "' added successfully!");
+      closeModal();
+      return false; // prevent actual form submission for demo
+    }
+  </script>
+</body>
+</html>
